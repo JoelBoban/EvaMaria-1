@@ -22,7 +22,7 @@ from database.filters_mdb import (
     get_filters,
 )
 import logging
-
+from commands import OFF_CHATS
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
@@ -30,7 +30,7 @@ BUTTONS = {}
 SPELL_CHECK = {}
 
 
-@Client.on_message(filters.group & filters.text & ~filters.edited & filters.incoming)
+@Client.on_message(filters.group & filters.text & ~filters.edited & filters.incoming & ~filters.(OFF_CHATS))
 async def give_filter(client, message):
     k = await manual_filters(client, message)
     if k == False:
