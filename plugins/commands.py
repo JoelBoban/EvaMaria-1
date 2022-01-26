@@ -61,7 +61,7 @@ async def on_off(bot, message):
 
        except Exception as e:
 
-           await message.reply(Error occurred!\n\n```{e}```")          
+           await message.reply("Error occurred!\n\n```{e}```")          
 
     else:
 
