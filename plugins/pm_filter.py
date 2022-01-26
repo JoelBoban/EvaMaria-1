@@ -22,7 +22,7 @@ from database.filters_mdb import (
     get_filters,
 )
 import logging
-from commands import OFF_CHATS
+from plugins.commands import OFF_CHATS
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
