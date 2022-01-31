@@ -52,7 +52,7 @@ async def on_off(bot, message):
            else:
               await message.reply("Use correct format!\n\n/autofilter on\autofilter off")    
        except Exception as e:
-           await message.reply(Error occurred!\n\n```{e}```")          
+           await message.reply("Error occurred!\n\n```{e}```")          
     else:
         await message.delete()
 
