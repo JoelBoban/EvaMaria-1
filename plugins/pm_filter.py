@@ -30,11 +30,43 @@ BUTTONS = {}
 SPELL_CHECK = {}
 
 
-@Client.on_message(filters.group & filters.text & ~filters.edited & filters.incoming & ~filters.chat(OFF_CHATS))
+OFF_CHATS = []
+
+@Client.on_message(filters.command(["autofilter", "Autofilter"]) & filters.group)
+async def on_off(bot, message):
+    member = await bot.get_chat_member(message.chat.id, message.from_user.id)
+    if member.status in ('administrator','creator'):     
+       try: 
+           cmd=message.command[1]
+           if cmd == "on":
+              if message.chat.id in OFF_CHATS:
+                 OFF_CHATS.remove(message.chat.id)
+                 await message.reply("<b>Autofilter turned on for this chat untill server restart!</b>")  
+              else:
+                 await message.reply("Already on in this chat!")                           
+           elif cmd == "off":
+              if message.chat.id in OFF_CHATS:
+                 await message.reply("Already off in this chat!")                                             
+              else:
+                 OFF_CHATS.append(message.chat.id)
+                 await message.reply("<b>Autofilter turned on for this chat untill server restart!</b>")
+           else:
+              await message.reply("Use correct format!\n\n/autofilter on\autofilter off")    
+       except Exception as e:
+           await message.reply(Error occurred!\n\n```{e}```")          
+    else:
+        await message.delete()
+
+
+
+@Client.on_message(filters.group & filters.text & ~filters.edited & filters.incoming)
 async def give_filter(client, message):
     k = await manual_filters(client, message)
     if k == False:
-        await auto_filter(client, message)
+        if message.chat.id in OFF_CHATS:
+            return
+        else:
+            await auto_filter(client, message)
 
 
 @Client.on_callback_query(filters.regex(r"^next"))
