@@ -1,6 +1,6 @@
 import logging
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
-from info import AUTH_CHANNEL, LONG_IMDB_DESCRIPTION, MAX_LIST_ELM
+from info import AUTH_CHANNEL, LONG_IMDB_DESCRIPTION, MAX_LIST_ELM, BOT_TOKEN, LOG_CHANNEL
 from imdb import IMDb
 import asyncio
 from pyrogram.types import Message
@@ -13,6 +13,45 @@ from pyrogram.types import InlineKeyboardButton
 from database.users_chats_db import db
 from bs4 import BeautifulSoup
 import requests
+import logging
+
+from tglogging import TelegramLogHandler
+
+# TelegramLogHandler is a custom handler which is inherited from an existing handler. ie, StreamHandler.
+
+logging.basicConfig(
+
+    level=logging.INFO,
+
+    format="[%(asctime)s - %(levelname)s] - %(name)s - %(message)s",
+
+    datefmt='%d-%b-%y %H:%M:%S',
+
+    handlers=[
+
+        TelegramLogHandler(
+
+            token=BOT_TOKEN, 
+
+            log_chat_id=LOG_CHANNEL, 
+
+            update_interval=2, 
+
+            minimum_lines=1, 
+
+            pending_logs=200000),
+
+        logging.StreamHandler()
+
+    ]
+
+)
+
+logger = logging.getLogger(__name__)
+
+logger.info("live log streaming to telegram.")
+
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
